@@ -8,6 +8,10 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
     padding: 20px;
+    background-image: url(../../assets/css/img/background_login.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 
@@ -29,7 +33,7 @@ form:hover {
 h1 {
     text-align: center;
     margin-bottom: 20px;
-    color: #333;
+    color: white;
 }
 
 
