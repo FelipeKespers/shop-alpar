@@ -1,70 +1,90 @@
-const app = angular.module('imcValue', []);
+const app = angular.module('Shoes', []);
 
-app.controller('ImcController', function ($scope, $http) {
-    $scope.imcName = "";
-    $scope.imcHeight = "";
-    $scope.imcWeight = "";
-    $scope.imc = 0;
-    $scope.data = [];
+app.controller('shoesController', function($http, $scope){
+    $scope.role = JSON.parse(localStorage.getItem('user')).role;
+    $scope.cartItems = 0;
+    $scope.quantity = 1;
+    $scope.products = [];
+    $scope.cartId;
+    $scope.modalRender = 0;
+    $scope.productIdUpdate = 0;
+    $scope.searchTerm = '';
 
-    $scope.calculateIMC = function () {
-        if ($scope.imcWeight && $scope.imcHeight) {
-            let weight = parseFloat($scope.imcWeight);
-            let height = parseFloat($scope.imcHeight);
-            let imc = weight / (height * height);
-            return imc;
-        } else {
-            return "";
-        }
-    };
+    $scope.getAllProducts = () => {
+        $http.get("http://localhost:3000/api/v1/product", {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then((response) => {
+            $scope.products = response.data;
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+    $scope.createCart = () => {
+        $http.post("http://localhost:3000/api/v1/cart", {
+            userId: JSON.parse(localStorage.getItem('user')).id,
+            total: 0,
+            closed: false,
+        }, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then((response) => {
+            console.log(response);
+            localStorage.setItem("cartID", response.data.id);
+            alert("Carrinho criado com sucesso");
+            window.location.reload();
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
 
-    $scope.submit = () => {
-        let imcResult = $scope.calculateIMC();
+    $scope.addToCart = (id, price) => {
+        console.log(userDetails);
+        for (let i = 0; i < userDetails.length; i++) {
+            const userDetail = userDetails[i];
+            if (userDetail.cart === undefined || userDetail.cart.length === 0) {
+                console.log("O usuário", userDetail.username, "não tem carrinhos. Criando um novo carrinho...");
+                localStorage.removeItem("cartID");
+                $scope.createCart();
+                return;
+            }
 
-        if (imcResult !== "") {
-            $http.post("http://localhost:3000/api/imc", {
-                name: $scope.imcName,
-                result: imcResult
-            })
-                .then((res) => {
-                    console.log(res);
-                    $scope.imcName = "";
-                    $scope.imcHeight = "";
-                    $scope.imcWeight = "";
-                    $scope.getAllimcs()
+            const lastCartIndex = userDetail.cart.length - 1;
+            const lastCart = userDetail.cart[lastCartIndex];
+
+            const isLastCartClosed = lastCart.closed;
+            if (isLastCartClosed) {
+                console.log("O último carrinho para o usuário", userDetail.username, "está fechado. Criando um novo carrinho...");
+                localStorage.removeItem("cartID");
+                $scope.createCart();
+                return;
+            } else {
+                console.log("O último carrinho para o usuário", userDetail.username, "está aberto. Mantendo o mesmo carrinho...");
+                $http.post("http://localhost:3000/api/v1/cartItem", {
+                    productId: id,
+                    cartId: userDetail.cart[lastCartIndex].id,
+                    quantity: 1,
+                    price: price,
+                }, {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                }).then((response) => {
+                    console.log(response);
+                    alert("Item adicionado ao carrinho");
+                    $scope.countItems();
                 })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    alert("An error occurred. Please try again later.");
-                });
-        } else {
-            alert("Preencha a altura e o peso para calcular o IMC.");
+                    .catch((error) => {
+                        if (error.status === 400) {
+                            alert("Item já está no carrinho");
+                        }
+                        console.log(error);
+                    });
+            }
         }
-    };
-    $scope.getAllimcs = () => {
-        $http.get("http://localhost:3000/api/imc", {
-
-        })
-            .then((res) => {
-                console.log(res)
-                $scope.data = res.data
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-                alert("An error occurred. Please try again later.");
-            });
-
     }
 
-    $scope.deleteImc = (id) => {
-        $http.delete(`http://localhost:3000/api/imc/${id}`)
-            .then((res) => {
-                $scope.getAllimcs();
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-                alert("An error occurred. Please try again later.");
-            });
-    }
-    $scope.getAllimcs();
-});
+    $scope.getAllProducts();
+})

@@ -28,6 +28,34 @@ export class UserRepository {
             return await this.prisma.user.findUnique({
                 where: {
                     id: decoded.id
+                }, select: {
+                    id: true,
+                    username: true,
+                    email: true,
+                    cart: {
+                        select: {
+                            id: true,
+                            total: true,
+                            closed: true,
+                            dateCreated: true,
+                            CartItem: {
+                                select: {
+                                    id: true,
+                                    quantity: true,
+                                    price: true,
+                                    product: {
+                                        select: {
+                                            id: true,
+                                            name: true,
+                                            description: true,
+                                            price: true,
+                                            imageUrl: true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             });
         } catch (error) {
@@ -72,7 +100,7 @@ export class UserRepository {
                 throw new Error('Invalid username/email or password');
             }
 
-            const token = jwt.sign({ id: user.id, username: user.username, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ id: user.id, username: user.username, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
             return { user: user, token: token };
         } catch (error) {

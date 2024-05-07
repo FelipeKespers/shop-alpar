@@ -10,10 +10,16 @@ app.controller('loginController', function ($scope, $http) {
             password: $scope.password,
         })
             .then((res) => {
-                console.log(res.data.message);
+                console.log('nao entrou');
                 localStorage.setItem("token", res.data.token);
-                localStorage.setItem("user", JSON.stringify(res.data.user));
-                window.location.href = "/";
+                    localStorage.setItem("user", JSON.stringify(res.data.user));
+                console.log(res.data.message);
+                if(res.data.user.role === "admin"){
+                    console.log('entrou');
+                    window.location.href = "/paginaadmin"
+                } else {
+                    window.location.href = "/";
+                }
             })
             .catch((error) => {
                 console.error("Error:", error);
