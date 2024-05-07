@@ -6,7 +6,6 @@ app.controller('ShopController', function ($scope, $http) {
     $scope.password = "";
 
     $scope.submit = () => {
-        console.log('oi');
         $http.post("http://localhost:3000/api/v1/register", {
             username: $scope.username,
             password: $scope.password,
@@ -14,6 +13,7 @@ app.controller('ShopController', function ($scope, $http) {
         })
             .then((res) => {
                 console.log(res.data);
+                window.location.href = "/auth/login"
             })
             .catch((error) => {
                 console.error("Error:", error);
