@@ -193,3 +193,21 @@ header {
     background-color: #008000;
     font-weight: bold;
   }
+
+  .editImg {
+    width: 40vh;
+    border: none;
+}
+
+ .exit {
+    background-color: rgba(160, 95, 95, 0.737);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+ }
+
+ .btn-align {
+  display: grid;
+  justify-content: flex-end;
+  gap: 1rem;
+ }

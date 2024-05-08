@@ -14,7 +14,7 @@ app.controller('cartController', function ($scope, $http) {
             .then((response) => {
                 console.log(response);
                 alert('Compra realizada com sucesso!');
-                window.location.href = '/cart/cartFinish';
+                window.location.href = '/historicoCart';
             })
             .catch((error) => {
                 console.log(error);

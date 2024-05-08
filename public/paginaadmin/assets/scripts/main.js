@@ -11,6 +11,11 @@ app.controller('shoesController', function ($http, $scope) {
     $scope.price = "";
     $scope.imageUrl = "";
 
+    $scope.logout = () => {
+        localStorage.clear()
+        window.location.href = "/welcome"
+    }
+
     $scope.openModal = () => {
         $scope.modal = true;
     }
