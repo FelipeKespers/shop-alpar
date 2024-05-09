@@ -160,4 +160,24 @@ export class CartRepository {
             throw error;
         }
     }
+
+    getLastCartByUserId = async (id) => { 
+        console.log(id);
+        try {
+            return await this.prisma.cart.findFirst({
+                where: {
+                    userId: Number(id),
+                    AND:{
+                        closed: false
+                    }
+                },
+                select: {
+                    id: true,
+                }
+            });
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 }

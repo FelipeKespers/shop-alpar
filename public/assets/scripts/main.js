@@ -10,6 +10,19 @@ app.controller('shoesController', function($http, $scope){
     $scope.productIdUpdate = 0;
     $scope.searchTerm = '';
 
+    $scope.getLastCartId = () => {
+        $http.get(`http://localhost:3000/api/v1/cart/${JSON.parse(localStorage.getItem('user')).id}/last`, {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        }).then((response) => {
+            console.log(response.data);
+            localStorage.setItem("cartID", response.data.id);
+        }).then((error) => {
+            console.log(error);
+        })
+    }
+
     $scope.getAllProducts = () => {
         $http.get("http://localhost:3000/api/v1/product", {
             headers: {
@@ -86,5 +99,6 @@ app.controller('shoesController', function($http, $scope){
         }
     }
 
+    $scope.getLastCartId();
     $scope.getAllProducts();
 })

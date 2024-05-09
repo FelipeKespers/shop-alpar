@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { CartController } from "../controller/Cart.controller.js";
 
+
 export const cartRouter = Router();
 const cartController = new CartController();
 
@@ -10,3 +11,4 @@ cartRouter.get('/:id', cartController.getCartById);
 cartRouter.post('/', cartController.createCart); 
 cartRouter.put('/:id', cartController.updateTotalPriceCart);
 cartRouter.put('/finish/:id', cartController.finishCart);
+cartRouter.get('/:id/last', cartController.getLastCartId);

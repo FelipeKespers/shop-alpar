@@ -14,6 +14,12 @@
     background-size: cover; 
 }
 
+.adicionarCarrinho {
+  border-radius: 8px;
+  background-color: green;
+  color: white;
+  padding: 5px;
+}
 
 h1{
     position:relative;

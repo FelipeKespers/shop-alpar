@@ -13,7 +13,7 @@ function fetchUserDetails() {
         .then(response => {
             if (response.status === 401) {
                 console.log("Unauthorized");
-                window.location.href = "/welcomePage";
+                window.location.href = "/welcome";
                 reject(new Error("Unauthorized"));
             }
             return response.json();

@@ -1,11 +1,12 @@
 import { CartRepository } from "../repository/Cart.repository.js";
 
-export class CartController {
 
+export class CartController {
+    
     constructor() {
         this.repository = new CartRepository();
     }
-
+    
     createCart = async (req, res) => {
         try {
             const { userId, total, closed } = req.body;
@@ -16,7 +17,7 @@ export class CartController {
             res.status(400).json({ message: error.message });
         }
     }
-
+    
     getAllCartItemFromCart = async (req, res) => {
         try {
             const cartID = req.params.id;
@@ -26,7 +27,7 @@ export class CartController {
             res.status(400).json({ message: error.message });
         }
     }
-
+    
     getCartById = async (req, res) => {
         try {
             const cartID = req.params.id;
@@ -36,7 +37,7 @@ export class CartController {
             res.status(400).json({ message: error.message });
         }
     }
-
+    
     getAllCartFinish = async (req, res) => {
         try {
             const userId = req.params.id;
@@ -46,7 +47,7 @@ export class CartController {
             res.status(400).json({ message: error.message });
         }
     }
-
+    
     updateTotalPriceCart = async (req, res) => {
         try {
             const cartID = req.params.id;
@@ -58,7 +59,7 @@ export class CartController {
         }
     }
     
-
+    
     finishCart = async (req, res) => {
         try {
             const cartID = req.params.id;
@@ -68,5 +69,15 @@ export class CartController {
             res.status(400).json({ message: error.message });
         }
     }
-
+    
+    getLastCartId = async (req, res) => {
+        try {
+            const id = req.params.id;
+            const cart = await this.repository.getLastCartByUserId(id);
+            console.log(cart);
+            res.status(200).json(cart);
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
+    }
 }
