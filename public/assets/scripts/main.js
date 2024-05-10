@@ -10,6 +10,11 @@ app.controller('shoesController', function($http, $scope){
     $scope.productIdUpdate = 0;
     $scope.searchTerm = '';
 
+    $scope.logout = () => {
+        localStorage.clear()
+        window.location.href = "/welcome"
+    }
+
     $scope.getLastCartId = () => {
         $http.get(`http://localhost:3000/api/v1/cart/${JSON.parse(localStorage.getItem('user')).id}/last`, {
             headers: {

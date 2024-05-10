@@ -137,12 +137,27 @@ header {
 }
 
 .icon{
-    display: flex;
-    justify-content: end;
-    margin-right: 30px;
+  display: grid;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1rem;
 }
   
 .comprar{
     background-color: #33333300;
     border: none;
+}
+
+.exit {
+  background-color: rgba(160, 95, 95, 0.737);
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.align {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  gap: 1rem;
 }
